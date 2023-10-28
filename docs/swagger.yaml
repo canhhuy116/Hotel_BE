@@ -1,0 +1,67 @@
+definitions:
+  users.User:
+    properties:
+      create_at:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      password:
+        type: string
+      update_at:
+        type: string
+      username:
+        type: string
+    type: object
+  users.UserCreate:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/users.User'
+            type: array
+      summary: List users
+      tags:
+      - users
+    post:
+      consumes:
+      - application/json
+      description: create user
+      parameters:
+      - description: UserCreate
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/users.UserCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/users.UserCreate'
+      summary: Create user
+      tags:
+      - users
+swagger: "2.0"
