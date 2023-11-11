@@ -1,6 +1,9 @@
 package users
 
-import "Hotel_BE/modules/bases"
+import (
+	"Hotel_BE/common"
+	"Hotel_BE/modules/bases"
+)
 
 const EntityName = "User"
 
@@ -13,4 +16,8 @@ type User struct {
 
 func (User) TableName() string {
 	return "users"
+}
+
+func (u *User) Mask() {
+	u.FakeId(common.DbUser)
 }

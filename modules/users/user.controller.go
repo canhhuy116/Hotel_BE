@@ -60,6 +60,10 @@ func (c *UserController) ListUser(appCtx component.AppContext) gin.HandlerFunc {
 			panic(common.ErrCannotListEntity(EntityName, err))
 		}
 
+		for i := range users {
+			users[i].Mask()
+		}
+
 		c.JSON(http.StatusOK, gin.H{"users": common.SimpleSuccessResponse(users)})
 	}
 }
