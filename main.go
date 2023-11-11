@@ -4,24 +4,35 @@ import (
 	"Hotel_BE/component"
 	"Hotel_BE/docs"
 	"Hotel_BE/modules/users"
+	"flag"
 	"fmt"
-	"github.com/gin-gonic/gin"
-	"github.com/swaggo/files"
-	"github.com/swaggo/gin-swagger"
-	"gorm.io/driver/mysql"
-	"gorm.io/gorm"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
 )
 
 func main() {
+	migrateFlag := flag.Bool("migrate", false, "Perform database migration")
+	flag.Parse()
+
 	docs.SwaggerInfo.Title = "Swagger Example API"
 	docs.SwaggerInfo.Description = "This is a sample server Petstore server."
 	docs.SwaggerInfo.Version = "1.0"
 	docs.SwaggerInfo.Host = "localhost:8080"
 	docs.SwaggerInfo.BasePath = "/v1"
 	docs.SwaggerInfo.Schemes = []string{"http", "https"}
+
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 
 	dsn := os.Getenv("DB_URL")
 
@@ -33,8 +44,12 @@ func main() {
 
 	db = db.Debug()
 
-	if err := migrateDatabase(db); err != nil {
-		log.Fatalln(err)
+	if *migrateFlag {
+		err := migrateDatabase(db)
+		if err != nil {
+			log.Fatalf("Database migration failed: %v", err)
+		}
+		fmt.Println("Database migration completed successfully.")
 	}
 
 	if err := runService(db); err != nil {

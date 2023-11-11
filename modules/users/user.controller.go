@@ -29,7 +29,7 @@ func (c *UserController) CreateUser(appCtx component.AppContext) gin.HandlerFunc
 			panic(err)
 		}
 
-		store := NewSQLStore(appCtx.GetMainDbConnection())
+		store := NewUserStore(appCtx.GetMainDbConnection())
 		biz := NewUserBiz(store)
 
 		if err := biz.CreateUser(c.Request.Context(), &data); err != nil {
@@ -50,7 +50,7 @@ func (c *UserController) CreateUser(appCtx component.AppContext) gin.HandlerFunc
 // @Router       /users [get]
 func (c *UserController) ListUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		store := NewSQLStore(appCtx.GetMainDbConnection())
+		store := NewUserStore(appCtx.GetMainDbConnection())
 		biz := NewUserBiz(store)
 
 		users, err := biz.ListUser(c.Request.Context())
