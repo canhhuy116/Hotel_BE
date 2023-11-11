@@ -2,6 +2,8 @@ package users
 
 import "Hotel_BE/modules/bases"
 
+const EntityName = "User"
+
 type User struct {
 	bases.BaseModel
 	Username string `json:"username" gorm:"column:username;unique"`

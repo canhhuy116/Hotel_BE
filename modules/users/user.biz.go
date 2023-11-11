@@ -27,9 +27,5 @@ func (biz *UserBiz) ListUser(ctx context.Context) ([]User, error) {
 	var users []User
 	err := biz.repo.FindAll(ctx, &users)
 
-	if err != nil {
-		return nil, err
-	}
-
-	return users, nil
+	return users, err
 }

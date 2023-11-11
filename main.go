@@ -3,6 +3,7 @@ package main
 import (
 	"Hotel_BE/component"
 	"Hotel_BE/docs"
+	"Hotel_BE/middlewares"
 	"Hotel_BE/modules/users"
 	"flag"
 	"fmt"
@@ -77,6 +78,7 @@ func runService(db *gorm.DB) error {
 	appCtx := component.NewAppContext(db)
 
 	r := gin.Default()
+	r.Use(middlewares.Recover(appCtx))
 
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "pong"})

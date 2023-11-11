@@ -1,6 +1,7 @@
 package users
 
 import (
+	"Hotel_BE/common"
 	"Hotel_BE/component"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -33,10 +34,10 @@ func (c *UserController) CreateUser(appCtx component.AppContext) gin.HandlerFunc
 		biz := NewUserBiz(store)
 
 		if err := biz.CreateUser(c.Request.Context(), &data); err != nil {
-			panic(err)
+			panic(common.ErrCannotCreateEntity(EntityName, err))
 		}
 
-		c.JSON(http.StatusOK, gin.H{"user": data})
+		c.JSON(http.StatusOK, gin.H{"user": common.SimpleSuccessResponse(data)})
 	}
 }
 
@@ -56,9 +57,9 @@ func (c *UserController) ListUser(appCtx component.AppContext) gin.HandlerFunc {
 		users, err := biz.ListUser(c.Request.Context())
 
 		if err != nil {
-			panic(err)
+			panic(common.ErrCannotListEntity(EntityName, err))
 		}
 
-		c.JSON(http.StatusOK, gin.H{"users": users})
+		c.JSON(http.StatusOK, gin.H{"users": common.SimpleSuccessResponse(users)})
 	}
 }
