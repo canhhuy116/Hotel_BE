@@ -17,7 +17,7 @@ const docTemplate = `{
     "paths": {
         "/users": {
             "get": {
-                "description": "get all users",
+                "description": "Get a list of users with pagination",
                 "consumes": [
                     "application/json"
                 ],
@@ -28,6 +28,26 @@ const docTemplate = `{
                     "users"
                 ],
                 "summary": "List users",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number (default is 1)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Number of items per page (default is 10)",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cursor for pagination",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -78,11 +98,11 @@ const docTemplate = `{
         "users.User": {
             "type": "object",
             "properties": {
-                "create_at": {
+                "created_at": {
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "name": {
                     "type": "string"
@@ -90,7 +110,7 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "update_at": {
+                "updated_at": {
                     "type": "string"
                 },
                 "username": {

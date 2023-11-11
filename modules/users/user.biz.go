@@ -1,12 +1,14 @@
 package users
 
 import (
+	"Hotel_BE/common"
 	"Hotel_BE/modules/bases"
 	"context"
 )
 
 type UserRepository interface {
 	bases.BaseRepository
+	ListUser(ctx context.Context, paging *common.Paging, moreKeys ...string) ([]User, error)
 }
 
 type UserBiz struct {
@@ -23,9 +25,11 @@ func (biz *UserBiz) CreateUser(ctx context.Context, data *UserCreate) error {
 	return err
 }
 
-func (biz *UserBiz) ListUser(ctx context.Context) ([]User, error) {
-	var users []User
-	err := biz.repo.FindAll(ctx, &users)
+func (biz *UserBiz) ListUser(ctx context.Context, paging *common.Paging) ([]User,
+	error) {
+	//var users []User
+	//err := biz.repo.FindAll(ctx, &users)
+	users, err := biz.repo.ListUser(ctx, paging)
 
 	return users, err
 }

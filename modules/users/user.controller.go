@@ -14,14 +14,15 @@ func NewUserController() *UserController {
 }
 
 // CreateUser godoc
-// @Summary      Create user
-// @Description  create user
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Param        user body UserCreate true "UserCreate"
-// @Success      200  {object} UserCreate
-// @Router       /users [post]
+//
+//	@Summary		Create user
+//	@Description	create user
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		UserCreate	true	"UserCreate"
+//	@Success		200		{object}	UserCreate
+//	@Router			/users [post]
 func (c *UserController) CreateUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var data UserCreate
@@ -37,24 +38,36 @@ func (c *UserController) CreateUser(appCtx component.AppContext) gin.HandlerFunc
 			panic(common.ErrCannotCreateEntity(EntityName, err))
 		}
 
-		c.JSON(http.StatusOK, gin.H{"user": common.SimpleSuccessResponse(data)})
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(data))
 	}
 }
 
-// ListUser  godoc
-// @Summary      List users
-// @Description  get all users
-// @Tags         users
-// @Accept       json
-// @Produce      json
-// @Success      200  {array}   User
-// @Router       /users [get]
+// ListUser godoc
+//
+//	@Summary		List users
+//	@Description	Get a list of users with pagination
+//	@Tags			users
+//	@Accept			json
+//	@Produce		json
+//	@Param			page	query	int		false	"Page number (default is 1)"
+//	@Param			limit	query	int		false	"Number of items per page (default is 10)"
+//	@Param			cursor	query	string	false	"Cursor for pagination"
+//	@Success		200		{array}	User
+//	@Router			/users [get]
 func (c *UserController) ListUser(appCtx component.AppContext) gin.HandlerFunc {
 	return func(c *gin.Context) {
+		var paging common.Paging
+
+		if err := c.ShouldBind(&paging); err != nil {
+			panic(common.ErrInvalidRequest(err))
+		}
+
+		paging.FullFill()
+
 		store := NewUserStore(appCtx.GetMainDbConnection())
 		biz := NewUserBiz(store)
 
-		users, err := biz.ListUser(c.Request.Context())
+		users, err := biz.ListUser(c.Request.Context(), &paging)
 
 		if err != nil {
 			panic(common.ErrCannotListEntity(EntityName, err))
@@ -62,8 +75,12 @@ func (c *UserController) ListUser(appCtx component.AppContext) gin.HandlerFunc {
 
 		for i := range users {
 			users[i].Mask()
+
+			if i == len(users)-1 {
+				paging.NextCursor = users[i].FakeID
+			}
 		}
 
-		c.JSON(http.StatusOK, gin.H{"users": common.SimpleSuccessResponse(users)})
+		c.JSON(http.StatusOK, common.NewSuccessResponse(users, paging, nil))
 	}
 }
