@@ -84,6 +84,17 @@ func runService(db *gorm.DB) error {
 		c.JSON(http.StatusOK, gin.H{"message": "pong"})
 	})
 
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"author":   "Hotel_BE",
+			"message":  "Welcome to Hotel_BE",
+			"health":   "OK",
+			"api-docs": "http://localhost:8080/swagger/index.html",
+			"version":  "1.0.0",
+			"status":   "running",
+		})
+	})
+
 	v1 := r.Group("/v1")
 
 	user := v1.Group("/users")
