@@ -105,11 +105,12 @@ func runService(db *gorm.DB) error {
 		user.POST("", userController.CreateUser(appCtx))
 		user.GET("", userController.ListUser(appCtx))
 	}
-	
+
 	roomType := v1.Group("/room-types")
 	{
-		roomTypeController := rooms.NewRoomTypeController()
-		roomType.POST("", roomTypeController.CreateRoomType(appCtx))
+		roomTypeController := rooms.NewRoomTypeController(appCtx)
+		roomType.POST("", roomTypeController.CreateRoomType())
+		roomType.PUT("/:id", roomTypeController.UpdateRoomType())
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

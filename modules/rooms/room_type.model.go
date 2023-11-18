@@ -9,7 +9,7 @@ const EntityName = "RoomType"
 
 type RoomType struct {
 	bases.BaseModel        `json:"-" gorm:"embedded"`
-	Name                   string  `json:"name" gorm:"column:name"`
+	Name                   string  `json:"name" gorm:"column:name; not null; unique"`
 	BedCount               int     `json:"bed_count" gorm:"column:bed_count"`
 	ChargesForCancellation float64 `json:"charges_for_cancellation" gorm:"column:charges_for_cancellation"`
 	Price                  float64 `json:"price" gorm:"column:price"`
