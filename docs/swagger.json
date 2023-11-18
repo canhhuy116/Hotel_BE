@@ -38,6 +38,47 @@
                 }
             }
         },
+        "/room-types/{id}": {
+            "put": {
+                "description": "Update room type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room-types"
+                ],
+                "summary": "Update room type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "RoomType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "RoomTypeUpdate",
+                        "name": "RoomType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomTypeUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomTypeUpdate"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get a list of users with pagination",
@@ -127,6 +168,26 @@
                 "name",
                 "price"
             ],
+            "properties": {
+                "bed_count": {
+                    "type": "integer"
+                },
+                "charges_for_cancellation": {
+                    "type": "number"
+                },
+                "food_option": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
+        "rooms.RoomTypeUpdate": {
+            "type": "object",
             "properties": {
                 "bed_count": {
                     "type": "integer"
