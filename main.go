@@ -4,6 +4,7 @@ import (
 	"Hotel_BE/component"
 	"Hotel_BE/docs"
 	"Hotel_BE/middlewares"
+	"Hotel_BE/modules/rooms"
 	"Hotel_BE/modules/users"
 	"flag"
 	"fmt"
@@ -61,6 +62,7 @@ func main() {
 func migrateDatabase(db *gorm.DB) error {
 	models := []interface{}{
 		&users.User{},
+		&rooms.RoomType{},
 		// Add more models as needed
 	}
 
@@ -103,6 +105,13 @@ func runService(db *gorm.DB) error {
 		user.POST("", userController.CreateUser(appCtx))
 		user.GET("", userController.ListUser(appCtx))
 	}
+	
+	roomType := v1.Group("/room-types")
+	{
+		roomTypeController := rooms.NewRoomTypeController()
+		roomType.POST("", roomTypeController.CreateRoomType(appCtx))
+	}
+
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	return r.Run(":8080")
 }

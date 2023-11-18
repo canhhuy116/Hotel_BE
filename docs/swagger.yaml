@@ -1,4 +1,23 @@
 definitions:
+  rooms.RoomTypeCreate:
+    properties:
+      bed_count:
+        type: integer
+      charges_for_cancellation:
+        type: number
+      food_option:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    required:
+    - bed_count
+    - charges_for_cancellation
+    - food_option
+    - name
+    - price
+    type: object
   users.User:
     properties:
       created_at:
@@ -26,6 +45,28 @@ definitions:
 info:
   contact: {}
 paths:
+  /room-types:
+    post:
+      consumes:
+      - application/json
+      description: Create room type
+      parameters:
+      - description: RoomTypeCreate
+        in: body
+        name: RoomType
+        required: true
+        schema:
+          $ref: '#/definitions/rooms.RoomTypeCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rooms.RoomTypeCreate'
+      summary: Create room type
+      tags:
+      - room-types
   /users:
     get:
       consumes:

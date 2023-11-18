@@ -15,6 +15,40 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/room-types": {
+            "post": {
+                "description": "Create room type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room-types"
+                ],
+                "summary": "Create room type",
+                "parameters": [
+                    {
+                        "description": "RoomTypeCreate",
+                        "name": "RoomType",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomTypeCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomTypeCreate"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get a list of users with pagination",
@@ -95,6 +129,33 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "rooms.RoomTypeCreate": {
+            "type": "object",
+            "required": [
+                "bed_count",
+                "charges_for_cancellation",
+                "food_option",
+                "name",
+                "price"
+            ],
+            "properties": {
+                "bed_count": {
+                    "type": "integer"
+                },
+                "charges_for_cancellation": {
+                    "type": "number"
+                },
+                "food_option": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "users.User": {
             "type": "object",
             "properties": {
