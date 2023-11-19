@@ -8,13 +8,13 @@ import (
 const RoomEntityName = "Room"
 
 type Room struct {
-	bases.BaseModel `json:"-" gorm:"embedded"`
+	bases.BaseModel `json:",inline" gorm:"embedded"`
 	Name            string         `json:"name" gorm:"column:name; not null; unique"`
-	RoomTypeId      int            `json:"room_type_id" gorm:"column:room_type_id; not null"`
+	RoomTypeId      int            `json:"-" gorm:"column:room_type_id; not null"`
 	OccupancyStatus string         `json:"occupancy_status" gorm:"column:occupancy_status; default:'available'"`
 	Description     string         `json:"description"`
 	Images          *common.Images `json:"images" gorm:"column:images; type:json"`
-	RoomType        *RoomType      `json:"room_type" gorm:"foreignKey:RoomTypeId"`
+	RoomType        *RoomType      `json:"roomType" gorm:"foreignKey:RoomTypeId; preload:false"`
 }
 
 func (r Room) TableName() string {

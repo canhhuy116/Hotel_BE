@@ -14,6 +14,23 @@ definitions:
       width:
         type: integer
     type: object
+  rooms.Room:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      occupancy_status:
+        type: string
+      room_type:
+        $ref: '#/definitions/rooms.RoomType'
+      room_type_id:
+        type: integer
+    type: object
   rooms.RoomCreate:
     properties:
       description:
@@ -29,6 +46,19 @@ definitions:
     required:
     - name
     - room_type_id
+    type: object
+  rooms.RoomType:
+    properties:
+      bed_count:
+        type: integer
+      charges_for_cancellation:
+        type: number
+      food_option:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
     type: object
   rooms.RoomTypeCreate:
     properties:
@@ -175,6 +205,33 @@ paths:
       tags:
       - room-types
   /rooms:
+    get:
+      consumes:
+      - application/json
+      description: Get rooms
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Cursor
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rooms.Room'
+      summary: Get rooms
+      tags:
+      - rooms
     post:
       consumes:
       - application/json
@@ -192,7 +249,9 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/rooms.RoomCreate'
+            items:
+              $ref: '#/definitions/rooms.RoomCreate'
+            type: array
       summary: Create room
       tags:
       - rooms

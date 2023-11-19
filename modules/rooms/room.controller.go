@@ -4,8 +4,9 @@ import (
 	"Hotel_BE/common"
 	"Hotel_BE/component"
 	"Hotel_BE/modules/bases"
-	"github.com/gin-gonic/gin"
 	"net/http"
+
+	"github.com/gin-gonic/gin"
 )
 
 type RoomController struct {
@@ -18,6 +19,46 @@ func NewRoomController(appCtx component.AppContext) *RoomController {
 	return &RoomController{roomBiz: biz}
 }
 
+// GetRooms godoc
+//
+//	@Summary		Get rooms
+//	@Description	Get rooms
+//	@Tags			rooms
+//	@Accept			json
+//	@Produce		json
+//	@Param			page	query		int		false	"Page"
+//	@Param			limit	query		int		false	"Limit"
+//	@Param			cursor	query		string	false	"Cursor"
+//	@Success		200		{object}	Room
+//	@Router			/rooms [get]
+func (controller *RoomController) GetRooms() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var paging common.Paging
+
+		if err := c.ShouldBindQuery(&paging); err != nil {
+			panic(err)
+		}
+
+		paging.FullFill()
+
+		rooms, err := controller.roomBiz.GetRooms(c.Request.Context(), &paging)
+
+		if err != nil {
+			panic(common.ErrCannotGetEntity(RoomEntityName, err))
+		}
+
+		for i := range rooms {
+			rooms[i].Mask()
+
+			if i == len(rooms)-1 {
+				paging.NextCursor = rooms[i].FakeID
+			}
+		}
+
+		c.JSON(http.StatusOK, common.NewSuccessResponse(rooms, paging, nil))
+	}
+}
+
 // CreateRoom godoc
 //
 //	@Summary		Create room
@@ -25,8 +66,8 @@ func NewRoomController(appCtx component.AppContext) *RoomController {
 //	@Tags			rooms
 //	@Accept			json
 //	@Produce		json
-//	@Param			Room	body		RoomCreate	true	"RoomCreate"
-//	@Success		200		{object}	RoomCreate
+//	@Param			Room	body	RoomCreate	true	"RoomCreate"
+//	@Success		200		{array}	RoomCreate
 //	@Router			/rooms [post]
 func (controller *RoomController) CreateRoom() gin.HandlerFunc {
 	return func(c *gin.Context) {

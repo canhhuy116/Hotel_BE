@@ -115,6 +115,47 @@ const docTemplate = `{
             }
         },
         "/rooms": {
+            "get": {
+                "description": "Get rooms",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Get rooms",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Cursor",
+                        "name": "cursor",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.Room"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create room",
                 "consumes": [
@@ -142,7 +183,10 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/rooms.RoomCreate"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rooms.RoomCreate"
+                            }
                         }
                     }
                 }
@@ -289,6 +333,32 @@ const docTemplate = `{
                 }
             }
         },
+        "rooms.Room": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Image"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "occupancy_status": {
+                    "type": "string"
+                },
+                "room_type": {
+                    "$ref": "#/definitions/rooms.RoomType"
+                },
+                "room_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "rooms.RoomCreate": {
             "type": "object",
             "required": [
@@ -310,6 +380,26 @@ const docTemplate = `{
                 },
                 "room_type_id": {
                     "type": "string"
+                }
+            }
+        },
+        "rooms.RoomType": {
+            "type": "object",
+            "properties": {
+                "bed_count": {
+                    "type": "integer"
+                },
+                "charges_for_cancellation": {
+                    "type": "number"
+                },
+                "food_option": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
                 }
             }
         },

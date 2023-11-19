@@ -8,6 +8,7 @@ import (
 
 type RoomRepository interface {
 	bases.BaseRepository
+	ListRoom(ctx context.Context, paging *common.Paging, moreKeys ...string) ([]Room, error)
 }
 
 type RoomBiz struct {
@@ -36,4 +37,16 @@ func (biz *RoomBiz) UpdateRoom(ctx context.Context, id int, data *RoomUpdate) er
 	}
 
 	return nil
+}
+
+func (biz *RoomBiz) GetRooms(ctx context.Context, paging *common.Paging) ([]Room, error) {
+	var rooms []Room
+
+	rooms, err := biz.repo.ListRoom(ctx, paging, "RoomType")
+
+	if err != nil {
+		return nil, common.ErrCannotGetEntity(RoomEntityName, err)
+	}
+
+	return rooms, nil
 }
