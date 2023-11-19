@@ -73,3 +73,26 @@ func (controller *RoomTypeController) UpdateRoomType() gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(nil))
 	}
 }
+
+// ListRoomTypes godoc
+//
+//	@Summary		List room types
+//	@Description	List room types
+//	@Tags			room-types
+//	@Accept			json
+//	@Produce		json
+//	@Success		200		{array}	RoomTypesResponse
+//	@Router			/room-types [get]
+func (controller *RoomTypeController) ListRoomTypes() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		roomTypes, err := controller.biz.GetRoomTypes(c.Request.Context())
+
+		if err != nil {
+			panic(common.ErrCannotListEntity(EntityName, err))
+		}
+
+		var result = MapToRoomTypesResponse(roomTypes)
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
+	}
+}
