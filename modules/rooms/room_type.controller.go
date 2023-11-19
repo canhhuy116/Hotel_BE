@@ -25,7 +25,7 @@ func NewRoomTypeController(appCtx component.AppContext) *RoomTypeController {
 //	@Tags			room-types
 //	@Accept			json
 //	@Produce		json
-//	@Param			RoomType	body		RoomTypeCreate	true "RoomTypeCreate"
+//	@Param			RoomType	body		RoomTypeCreate	true	"RoomTypeCreate"
 //	@Success		200			{object}	RoomTypeCreate
 //	@Router			/room-types [post]
 func (controller *RoomTypeController) CreateRoomType() gin.HandlerFunc {
@@ -37,7 +37,7 @@ func (controller *RoomTypeController) CreateRoomType() gin.HandlerFunc {
 		}
 
 		if err := controller.biz.CreateRoomType(c.Request.Context(), &data); err != nil {
-			panic(common.ErrCannotCreateEntity(EntityName, err))
+			panic(common.ErrCannotCreateEntity(RoomTypeEntityName, err))
 		}
 
 		data.FakeId(common.DbRoomType)
@@ -53,9 +53,9 @@ func (controller *RoomTypeController) CreateRoomType() gin.HandlerFunc {
 //	@Tags			room-types
 //	@Accept			json
 //	@Produce		json
-//	@Param			id		path	string		true	"RoomType ID"
-//	@Param			RoomType	body	RoomTypeUpdate	true	"RoomTypeUpdate"
-//	@Success		200		{object}	RoomTypeUpdate
+//	@Param			id			path		string			true	"RoomType ID"
+//	@Param			RoomType	body		RoomTypeUpdate	true	"RoomTypeUpdate"
+//	@Success		200			{object}	RoomTypeUpdate
 //	@Router			/room-types/{id} [put]
 func (controller *RoomTypeController) UpdateRoomType() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -67,7 +67,7 @@ func (controller *RoomTypeController) UpdateRoomType() gin.HandlerFunc {
 		}
 
 		if err := controller.biz.UpdateRoomType(c.Request.Context(), id, &data); err != nil {
-			panic(common.ErrCannotUpdateEntity(EntityName, err))
+			panic(common.ErrCannotUpdateEntity(RoomTypeEntityName, err))
 		}
 
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(nil))
@@ -81,14 +81,14 @@ func (controller *RoomTypeController) UpdateRoomType() gin.HandlerFunc {
 //	@Tags			room-types
 //	@Accept			json
 //	@Produce		json
-//	@Success		200		{array}	RoomTypesResponse
+//	@Success		200	{array}	RoomTypesResponse
 //	@Router			/room-types [get]
 func (controller *RoomTypeController) ListRoomTypes() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		roomTypes, err := controller.biz.GetRoomTypes(c.Request.Context())
 
 		if err != nil {
-			panic(common.ErrCannotListEntity(EntityName, err))
+			panic(common.ErrCannotListEntity(RoomTypeEntityName, err))
 		}
 
 		var result = MapToRoomTypesResponse(roomTypes)

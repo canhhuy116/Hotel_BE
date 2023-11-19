@@ -5,7 +5,7 @@ import (
 	"Hotel_BE/modules/bases"
 )
 
-const EntityName = "RoomType"
+const RoomTypeEntityName = "RoomType"
 
 type RoomType struct {
 	bases.BaseModel        `json:"-" gorm:"embedded"`

@@ -1,4 +1,35 @@
 definitions:
+  common.Image:
+    properties:
+      cloud_name:
+        type: string
+      extension:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+  rooms.RoomCreate:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      room_type_id:
+        type: integer
+    required:
+    - name
+    - room_type_id
+    type: object
   rooms.RoomTypeCreate:
     properties:
       bed_count:
@@ -130,6 +161,28 @@ paths:
       summary: Update room type
       tags:
       - room-types
+  /rooms:
+    post:
+      consumes:
+      - application/json
+      description: Create room
+      parameters:
+      - description: RoomCreate
+        in: body
+        name: Room
+        required: true
+        schema:
+          $ref: '#/definitions/rooms.RoomCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rooms.RoomCreate'
+      summary: Create room
+      tags:
+      - rooms
   /users:
     get:
       consumes:

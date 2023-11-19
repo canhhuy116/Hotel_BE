@@ -114,6 +114,40 @@ const docTemplate = `{
                 }
             }
         },
+        "/rooms": {
+            "post": {
+                "description": "Create room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Create room",
+                "parameters": [
+                    {
+                        "description": "RoomCreate",
+                        "name": "Room",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomCreate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomCreate"
+                        }
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get a list of users with pagination",
@@ -194,6 +228,53 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "common.Image": {
+            "type": "object",
+            "properties": {
+                "cloud_name": {
+                    "type": "string"
+                },
+                "extension": {
+                    "type": "string"
+                },
+                "height": {
+                    "type": "integer"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "url": {
+                    "type": "string"
+                },
+                "width": {
+                    "type": "integer"
+                }
+            }
+        },
+        "rooms.RoomCreate": {
+            "type": "object",
+            "required": [
+                "name",
+                "room_type_id"
+            ],
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Image"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "room_type_id": {
+                    "type": "integer"
+                }
+            }
+        },
         "rooms.RoomTypeCreate": {
             "type": "object",
             "required": [

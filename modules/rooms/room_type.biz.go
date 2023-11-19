@@ -29,11 +29,11 @@ func (biz *RoomTypeBiz) UpdateRoomType(ctx context.Context, id int, data *RoomTy
 	err := biz.repo.Find(ctx, id, &oldData)
 
 	if err != nil {
-		return common.ErrCannotGetEntity(EntityName, err)
+		return common.ErrCannotGetEntity(RoomTypeEntityName, err)
 	}
 
 	if err := biz.repo.Update(ctx, id, data); err != nil {
-		return common.ErrCannotUpdateEntity(EntityName, err)
+		return common.ErrCannotUpdateEntity(RoomTypeEntityName, err)
 	}
 
 	return nil
@@ -44,7 +44,7 @@ func (biz *RoomTypeBiz) GetRoomTypes(ctx context.Context) ([]RoomType, error) {
 	err := biz.repo.FindAll(ctx, &result)
 
 	if err != nil {
-		return nil, common.ErrCannotListEntity(EntityName, err)
+		return nil, common.ErrCannotListEntity(RoomTypeEntityName, err)
 	}
 
 	return result, nil
