@@ -38,3 +38,14 @@ func (biz *RoomTypeBiz) UpdateRoomType(ctx context.Context, id int, data *RoomTy
 
 	return nil
 }
+
+func (biz *RoomTypeBiz) GetRoomTypes(ctx context.Context) ([]RoomType, error) {
+	var result []RoomType
+	err := biz.repo.FindAll(ctx, &result)
+
+	if err != nil {
+		return nil, common.ErrCannotListEntity(EntityName, err)
+	}
+
+	return result, nil
+}

@@ -16,6 +16,30 @@ const docTemplate = `{
     "basePath": "{{.BasePath}}",
     "paths": {
         "/room-types": {
+            "get": {
+                "description": "List room types",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room-types"
+                ],
+                "summary": "List room types",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/rooms.RoomTypesResponse"
+                            }
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Create room type",
                 "consumes": [
@@ -214,6 +238,17 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
+                }
+            }
+        },
+        "rooms.RoomTypesResponse": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
                 }
             }
         },
