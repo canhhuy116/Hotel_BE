@@ -63,6 +63,7 @@ func migrateDatabase(db *gorm.DB) error {
 	models := []interface{}{
 		&users.User{},
 		&rooms.RoomType{},
+		&rooms.Room{},
 		// Add more models as needed
 	}
 
@@ -112,6 +113,14 @@ func runService(db *gorm.DB) error {
 		roomType.POST("", roomTypeController.CreateRoomType())
 		roomType.PUT("/:id", roomTypeController.UpdateRoomType())
 		roomType.GET("", roomTypeController.ListRoomTypes())
+	}
+
+	room := v1.Group("/rooms")
+	{
+		roomController := rooms.NewRoomController(appCtx)
+		room.POST("", roomController.CreateRoom())
+		room.PUT("/:id", roomController.UpdateRoom())
+		room.GET("", roomController.GetRooms())
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

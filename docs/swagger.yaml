@@ -1,4 +1,65 @@
 definitions:
+  common.Image:
+    properties:
+      cloud_name:
+        type: string
+      extension:
+        type: string
+      height:
+        type: integer
+      id:
+        type: integer
+      url:
+        type: string
+      width:
+        type: integer
+    type: object
+  rooms.Room:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      occupancy_status:
+        type: string
+      room_type:
+        $ref: '#/definitions/rooms.RoomType'
+      room_type_id:
+        type: integer
+    type: object
+  rooms.RoomCreate:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      room_type_id:
+        type: string
+    required:
+    - name
+    - room_type_id
+    type: object
+  rooms.RoomType:
+    properties:
+      bed_count:
+        type: integer
+      charges_for_cancellation:
+        type: number
+      food_option:
+        type: string
+      name:
+        type: string
+      price:
+        type: number
+    type: object
   rooms.RoomTypeCreate:
     properties:
       bed_count:
@@ -36,6 +97,19 @@ definitions:
       id:
         type: string
       name:
+        type: string
+    type: object
+  rooms.RoomUpdate:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      room_type_id:
         type: string
     type: object
   users.User:
@@ -130,6 +204,82 @@ paths:
       summary: Update room type
       tags:
       - room-types
+  /rooms:
+    get:
+      consumes:
+      - application/json
+      description: Get rooms
+      parameters:
+      - description: Page
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Cursor
+        in: query
+        name: cursor
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rooms.Room'
+      summary: Get rooms
+      tags:
+      - rooms
+    post:
+      consumes:
+      - application/json
+      description: Create room
+      parameters:
+      - description: RoomCreate
+        in: body
+        name: Room
+        required: true
+        schema:
+          $ref: '#/definitions/rooms.RoomCreate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/rooms.RoomCreate'
+            type: array
+      summary: Create room
+      tags:
+      - rooms
+  /rooms/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: RoomUpdate
+        in: body
+        name: Room
+        required: true
+        schema:
+          $ref: '#/definitions/rooms.RoomUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update room
+      tags:
+      - rooms
   /users:
     get:
       consumes:
