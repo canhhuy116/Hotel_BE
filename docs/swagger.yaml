@@ -25,7 +25,7 @@ definitions:
       name:
         type: string
       room_type_id:
-        type: integer
+        type: string
     required:
     - name
     - room_type_id
@@ -67,6 +67,19 @@ definitions:
       id:
         type: string
       name:
+        type: string
+    type: object
+  rooms.RoomUpdate:
+    properties:
+      description:
+        type: string
+      images:
+        items:
+          $ref: '#/definitions/common.Image'
+        type: array
+      name:
+        type: string
+      room_type_id:
         type: string
     type: object
   users.User:
@@ -181,6 +194,31 @@ paths:
           schema:
             $ref: '#/definitions/rooms.RoomCreate'
       summary: Create room
+      tags:
+      - rooms
+  /rooms/{id}:
+    put:
+      consumes:
+      - application/json
+      description: Update room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: RoomUpdate
+        in: body
+        name: Room
+        required: true
+        schema:
+          $ref: '#/definitions/rooms.RoomUpdate'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+      summary: Update room
       tags:
       - rooms
   /users:

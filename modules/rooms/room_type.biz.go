@@ -26,9 +26,8 @@ func (biz *RoomTypeBiz) CreateRoomType(ctx context.Context, data *RoomTypeCreate
 
 func (biz *RoomTypeBiz) UpdateRoomType(ctx context.Context, id int, data *RoomTypeUpdate) error {
 	var oldData RoomType
-	err := biz.repo.Find(ctx, id, &oldData)
 
-	if err != nil {
+	if err := biz.repo.Find(ctx, id, &oldData); err != nil {
 		return common.ErrCannotGetEntity(RoomTypeEntityName, err)
 	}
 

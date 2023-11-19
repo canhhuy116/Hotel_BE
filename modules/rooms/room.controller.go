@@ -3,6 +3,7 @@ package rooms
 import (
 	"Hotel_BE/common"
 	"Hotel_BE/component"
+	"Hotel_BE/modules/bases"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -35,6 +36,8 @@ func (controller *RoomController) CreateRoom() gin.HandlerFunc {
 			panic(err)
 		}
 
+		data.RoomTypeId = bases.GetIdFromFakeId(data.RoomTypeFakeId)
+
 		if err := controller.roomBiz.CreateRoom(c.Request.Context(), &data); err != nil {
 			panic(common.ErrCannotCreateEntity(RoomEntityName, err))
 		}
@@ -42,5 +45,34 @@ func (controller *RoomController) CreateRoom() gin.HandlerFunc {
 		data.FakeId(common.DbRoom)
 
 		c.JSON(http.StatusCreated, common.SimpleSuccessResponse(data.FakeID))
+	}
+}
+
+// UpdateRoom godoc
+//
+//	@Summary		Update room
+//	@Description	Update room
+//	@Tags			rooms
+//	@Accept			json
+//	@Produce		json
+//	@Param			id		path	string		true	"Room ID"
+//	@Param			Room	body	RoomUpdate	true	"RoomUpdate"
+//	@Success		200
+//	@Router			/rooms/{id} [put]
+func (controller *RoomController) UpdateRoom() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := bases.GetIdFromFakeId(c.Param("id"))
+
+		var data RoomUpdate
+
+		if err := c.ShouldBindJSON(&data); err != nil {
+			panic(err)
+		}
+
+		if err := controller.roomBiz.UpdateRoom(c.Request.Context(), id, &data); err != nil {
+			panic(common.ErrCannotUpdateEntity(RoomEntityName, err))
+		}
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }

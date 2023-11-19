@@ -1,6 +1,7 @@
 package rooms
 
 import (
+	"Hotel_BE/common"
 	"Hotel_BE/modules/bases"
 	"context"
 )
@@ -21,4 +22,18 @@ func (biz *RoomBiz) CreateRoom(ctx context.Context, data *RoomCreate) error {
 	err := biz.repo.Create(ctx, data)
 
 	return err
+}
+
+func (biz *RoomBiz) UpdateRoom(ctx context.Context, id int, data *RoomUpdate) error {
+	var oldData Room
+
+	if err := biz.repo.Find(ctx, id, &oldData); err != nil {
+		return common.ErrCannotGetEntity(RoomEntityName, err)
+	}
+
+	if err := biz.repo.Update(ctx, id, data); err != nil {
+		return common.ErrCannotUpdateEntity(RoomEntityName, err)
+	}
+
+	return nil
 }

@@ -148,6 +148,44 @@ const docTemplate = `{
                 }
             }
         },
+        "/rooms/{id}": {
+            "put": {
+                "description": "Update room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Update room",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Room ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "RoomUpdate",
+                        "name": "Room",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomUpdate"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "description": "Get a list of users with pagination",
@@ -271,7 +309,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "room_type_id": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -329,6 +367,26 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "name": {
+                    "type": "string"
+                }
+            }
+        },
+        "rooms.RoomUpdate": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                },
+                "images": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/common.Image"
+                    }
+                },
+                "name": {
+                    "type": "string"
+                },
+                "room_type_id": {
                     "type": "string"
                 }
             }
