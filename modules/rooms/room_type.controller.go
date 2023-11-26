@@ -81,7 +81,7 @@ func (controller *RoomTypeController) UpdateRoomType() gin.HandlerFunc {
 //	@Tags			room-types
 //	@Accept			json
 //	@Produce		json
-//	@Success		200	{array}	RoomTypesResponse
+//	@Success		200	{array}	RoomTypeResponse
 //	@Router			/room-types [get]
 func (controller *RoomTypeController) ListRoomTypes() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -91,7 +91,36 @@ func (controller *RoomTypeController) ListRoomTypes() gin.HandlerFunc {
 			panic(common.ErrCannotListEntity(RoomTypeEntityName, err))
 		}
 
-		var result = MapToRoomTypesResponse(roomTypes)
+		var result = make([]RoomTypeResponse, len(roomTypes))
+		for i, roomType := range roomTypes {
+			result[i] = MapToRoomTypeResponse(&roomType)
+		}
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
+	}
+}
+
+// GetRoomType godoc
+//
+//	@Summary		Get room type
+//	@Description	Get room type
+//	@Tags			room-types
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"RoomType ID"
+//	@Success		200	{object}	RoomTypeResponse
+//	@Router			/room-types/{id} [get]
+func (controller *RoomTypeController) GetRoomType() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := bases.GetIdFromFakeId(c.Param("id"))
+
+		roomType, err := controller.biz.GetRoomType(c.Request.Context(), id)
+
+		if err != nil {
+			panic(common.ErrCannotGetEntity(RoomTypeEntityName, err))
+		}
+
+		var result = MapToRoomTypeResponse(roomType)
 
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
 	}

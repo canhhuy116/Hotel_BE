@@ -34,7 +34,7 @@ const docTemplate = `{
                         "schema": {
                             "type": "array",
                             "items": {
-                                "$ref": "#/definitions/rooms.RoomTypesResponse"
+                                "$ref": "#/definitions/rooms.RoomTypeResponse"
                             }
                         }
                     }
@@ -74,6 +74,36 @@ const docTemplate = `{
             }
         },
         "/room-types/{id}": {
+            "get": {
+                "description": "Get room type",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "room-types"
+                ],
+                "summary": "Get room type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "RoomType ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.RoomTypeResponse"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Update room type",
                 "consumes": [
@@ -336,7 +366,13 @@ const docTemplate = `{
         "rooms.Room": {
             "type": "object",
             "properties": {
+                "created_at": {
+                    "type": "string"
+                },
                 "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "string"
                 },
                 "images": {
@@ -351,11 +387,11 @@ const docTemplate = `{
                 "occupancy_status": {
                     "type": "string"
                 },
-                "room_type": {
+                "roomType": {
                     "$ref": "#/definitions/rooms.RoomType"
                 },
-                "room_type_id": {
-                    "type": "integer"
+                "updated_at": {
+                    "type": "string"
                 }
             }
         },
@@ -430,6 +466,29 @@ const docTemplate = `{
                 }
             }
         },
+        "rooms.RoomTypeResponse": {
+            "type": "object",
+            "properties": {
+                "bed_count": {
+                    "type": "integer"
+                },
+                "charges_for_cancellation": {
+                    "type": "number"
+                },
+                "food_option": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "price": {
+                    "type": "number"
+                }
+            }
+        },
         "rooms.RoomTypeUpdate": {
             "type": "object",
             "properties": {
@@ -447,17 +506,6 @@ const docTemplate = `{
                 },
                 "price": {
                     "type": "number"
-                }
-            }
-        },
-        "rooms.RoomTypesResponse": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
                 }
             }
         },
