@@ -8,6 +8,7 @@ import (
 	"Hotel_BE/modules/users"
 	"flag"
 	"fmt"
+	"github.com/gin-contrib/cors"
 	"log"
 	"net/http"
 	"os"
@@ -83,6 +84,14 @@ func runService(db *gorm.DB) error {
 	r := gin.Default()
 	r.Use(middlewares.Recover(appCtx))
 
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:5173"}
+	config.AllowMethods = []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Type", "Authorization"}
+	config.AllowCredentials = true
+	config.ExposeHeaders = []string{"Content-Length"}
+	r.Use(cors.New(config))
+
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{"message": "pong"})
 	})
@@ -113,6 +122,7 @@ func runService(db *gorm.DB) error {
 		roomType.POST("", roomTypeController.CreateRoomType())
 		roomType.PUT("/:id", roomTypeController.UpdateRoomType())
 		roomType.GET("", roomTypeController.ListRoomTypes())
+		roomType.GET("/:id", roomTypeController.GetRoomType())
 	}
 
 	room := v1.Group("/rooms")
@@ -121,6 +131,7 @@ func runService(db *gorm.DB) error {
 		room.POST("", roomController.CreateRoom())
 		room.PUT("/:id", roomController.UpdateRoom())
 		room.GET("", roomController.GetRooms())
+		room.GET("/:id", roomController.GetRoom())
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

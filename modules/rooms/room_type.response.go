@@ -1,21 +1,25 @@
 package rooms
 
-type RoomTypesResponse struct {
-	Id   string `json:"id"`
-	Name string `json:"name"`
+type RoomTypeResponse struct {
+	Id                     string  `json:"id"`
+	Name                   string  `json:"name"`
+	Price                  float64 `json:"price"`
+	BedCount               int     `json:"bed_count"`
+	ChargesForCancellation float64 `json:"charges_for_cancellation"`
+	FoodOption             string  `json:"food_option"`
 }
 
-func MapToRoomTypesResponse(roomTypes []RoomType) []RoomTypesResponse {
-	roomTypesResponse := make([]RoomTypesResponse, len(roomTypes))
+func MapToRoomTypeResponse(roomType *RoomType) RoomTypeResponse {
+	roomType.Mask()
 
-	for i, roomType := range roomTypes {
-		roomType.Mask()
-
-		roomTypesResponse[i] = RoomTypesResponse{
-			Id:   roomType.FakeID,
-			Name: roomType.Name,
-		}
+	roomTypeResponse := RoomTypeResponse{
+		Id:                     roomType.FakeID,
+		Name:                   roomType.Name,
+		Price:                  roomType.Price,
+		BedCount:               roomType.BedCount,
+		ChargesForCancellation: roomType.ChargesForCancellation,
+		FoodOption:             roomType.FoodOption,
 	}
 
-	return roomTypesResponse
+	return roomTypeResponse
 }

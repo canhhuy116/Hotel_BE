@@ -48,3 +48,14 @@ func (biz *RoomTypeBiz) GetRoomTypes(ctx context.Context) ([]RoomType, error) {
 
 	return result, nil
 }
+
+func (biz *RoomTypeBiz) GetRoomType(ctx context.Context, id int) (*RoomType, error) {
+	var result RoomType
+	err := biz.repo.Find(ctx, id, &result)
+
+	if err != nil {
+		return nil, common.ErrCannotGetEntity(RoomTypeEntityName, err)
+	}
+
+	return &result, nil
+}
