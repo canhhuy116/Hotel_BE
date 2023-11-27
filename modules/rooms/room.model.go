@@ -23,4 +23,5 @@ func (r Room) TableName() string {
 
 func (r *Room) Mask() {
 	r.FakeId(common.DbRoom)
+	r.RoomType.Mask()
 }

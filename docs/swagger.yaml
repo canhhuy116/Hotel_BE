@@ -78,7 +78,6 @@ definitions:
         type: number
     required:
     - bed_count
-    - charges_for_cancellation
     - food_option
     - name
     - price
@@ -288,6 +287,26 @@ paths:
       tags:
       - rooms
   /rooms/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get room
+      parameters:
+      - description: Room ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rooms.Room'
+      summary: Get room
+      tags:
+      - rooms
     put:
       consumes:
       - application/json

@@ -36,3 +36,21 @@ func (s *RoomStore) ListRoom(ctx context.Context, paging *common.Paging, moreKey
 
 	return result, nil
 }
+
+func (s *RoomStore) FindRoom(ctx context.Context, id int, moreKeys ...string) (*Room, error) {
+	db := s.db
+
+	var result Room
+
+	db = db.Table(Room{}.TableName()).Where("id = ?", id).Find(&result)
+
+	for i := range moreKeys {
+		db = db.Preload(moreKeys[i])
+	}
+
+	if err := db.First(&result).Error; err != nil {
+		return nil, common.ErrDB(err)
+	}
+
+	return &result, nil
+}

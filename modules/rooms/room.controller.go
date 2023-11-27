@@ -117,3 +117,29 @@ func (controller *RoomController) UpdateRoom() gin.HandlerFunc {
 		c.JSON(http.StatusOK, common.SimpleSuccessResponse(true))
 	}
 }
+
+// GetRoom godoc
+//
+//	@Summary		Get room
+//	@Description	Get room
+//	@Tags			rooms
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		string	true	"Room ID"
+//	@Success		200	{object}	Room
+//	@Router			/rooms/{id} [get]
+func (controller *RoomController) GetRoom() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		id := bases.GetIdFromFakeId(c.Param("id"))
+
+		result, err := controller.roomBiz.GetRoom(c.Request.Context(), id)
+
+		if err != nil {
+			panic(common.ErrCannotGetEntity(RoomEntityName, err))
+		}
+
+		result.Mask()
+
+		c.JSON(http.StatusOK, common.SimpleSuccessResponse(result))
+	}
+}

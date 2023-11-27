@@ -131,6 +131,7 @@ func runService(db *gorm.DB) error {
 		room.POST("", roomController.CreateRoom())
 		room.PUT("/:id", roomController.UpdateRoom())
 		room.GET("", roomController.GetRooms())
+		room.GET("/:id", roomController.GetRoom())
 	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -223,6 +223,36 @@ const docTemplate = `{
             }
         },
         "/rooms/{id}": {
+            "get": {
+                "description": "Get room",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "rooms"
+                ],
+                "summary": "Get room",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Room ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/rooms.Room"
+                        }
+                    }
+                }
+            },
             "put": {
                 "description": "Update room",
                 "consumes": [
@@ -443,7 +473,6 @@ const docTemplate = `{
             "type": "object",
             "required": [
                 "bed_count",
-                "charges_for_cancellation",
                 "food_option",
                 "name",
                 "price"
